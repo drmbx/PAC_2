@@ -47,28 +47,6 @@ input_batch = input_tensor.unsqueeze(0)
 model(input_batch)
 image_features = layer4_features
 print(image_features)
-print(template_features.size())
+print(image_features.size())
 
-template_features_flat = torch.flatten(template_features, start_dim=2)
-image_features_flat = torch.flatten(image_features, start_dim=2)
-
-# Нормализуем признаки для вычисления косинусного сходства
-template_features_norm = F.normalize(template_features_flat, p=2, dim=2)
-image_features_norm = F.normalize(image_features_flat, p=2, dim=2)
-
-# Усреднение значений признаков в пределах каждого канала признаков
-template_features_norm_mean = torch.mean(template_features_norm, dim=2, keepdim=True)
-image_features_norm_mean = torch.mean(image_features_norm, dim=2)
-
-# Вычисляем косинусное сходство с помощью скалярного произведения
-cos_sim = torch.matmul(template_features_norm_mean, image_features_norm_mean.permute(0, 1, 3, 2))
-
-# Преобразуем размерности для визуализации тепловой карты
-cos_sim = cos_sim.squeeze().cpu().numpy()
-
-print("Размерность тензора cos_sim:", cos_sim.shape)
-
-# Визуализируем тепловую карту
-plt.imshow(cos_sim, cmap='hot', interpolation='nearest')
-plt.colorbar()
-plt.show()
+torch.nn.Conv2d(2048, 1, (3, 5))()
